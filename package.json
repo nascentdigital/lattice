@@ -1,0 +1,41 @@
+{
+    "private": false,
+    "name": "@nascentdigital/lattice",
+    "version": "1.0.0",
+    "description": "Utility classes for responsive JS web development.",
+    "keywords": [
+        "responsive",
+        "utility",
+        "javascript",
+        "typescript"
+    ],
+    "author": "Simeon de Dios <simeon@nascentdigital.com>",
+    "license": "MIT",
+    "repository": "nascentdigital/lattice",
+    "main": "dist/index.js",
+    "module": "dist/index.es.js",
+    "jsnext:main": "dist/index.es.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "rollup -c",
+        "start": "rollup -c -w",
+        "prepare": "npm run build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "rxjs": "^6.5.3"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.6.4",
+        "@babel/runtime": "^7.6.3",
+        "cross-env": "^6.0.0",
+        "rollup": "^1.21.4",
+        "rollup-plugin-babel": "^4.3.3",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-typescript2": "^0.24.2",
+        "typescript": "^3.6.3"
+    },
+    "files": [
+        "dist"
+    ]
+}
