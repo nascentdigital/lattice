@@ -1,7 +1,6 @@
 // imports
 import {BehaviorSubject, Observable} from "rxjs";
 import {filter} from "rxjs/operators";
-import {Constants} from "../Constants";
 import {Breakpoint, Breakpoints, BreakpointObservation, BreakpointsDefinition} from "../types";
 
 
@@ -16,8 +15,6 @@ interface IBreakpointContext {
 
 // class definition
 export class BreakpointObserver {
-
-    private static _sharedInstance?: BreakpointObserver;
 
     private readonly _contexts: IBreakpointContext[];
     private _current: BreakpointObservation;
@@ -47,17 +44,6 @@ export class BreakpointObserver {
             // bind breakpoint (indirectly updates to matching breakpoint)
             this.bindBreakpoint(context);
         });
-    }
-
-    public static get sharedInstance() {
-
-        // create instance, if required
-        if (this._sharedInstance === undefined) {
-            this._sharedInstance = new BreakpointObserver(Constants.defaults.breakpoints);
-        }
-
-        // return shared instance
-        return this._sharedInstance;
     }
 
     private static createContexts(breakpoints: BreakpointsDefinition): IBreakpointContext[] {
