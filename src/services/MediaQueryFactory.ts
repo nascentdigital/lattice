@@ -18,13 +18,13 @@ export class MediaQueryFactory {
 
 
     public up(start: Breakpoint) {
-        return `@media (min-width: ${this.breakpoints[start]}px)`;
+        return `@media screen and (min-width: ${this.breakpoints[start]}px)`;
     }
 
     public down(end: Breakpoint) {
         return end === "xl"
             ? this.up("xs")
-            : `@media (max-width: ${this.upperWidth(end)}px)`;
+            : `@media screen and (max-width: ${this.upperWidth(end)}px)`;
     }
 
     public between(start: Breakpoint, end: Breakpoint) {
