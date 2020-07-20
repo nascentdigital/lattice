@@ -46,6 +46,11 @@ export class BreakpointObserver {
         });
     }
 
+    public dispose() {
+        this._contexts.forEach((context) =>
+            context.mediaQuery.removeListener(context.mediaQueryCallback));
+    }
+
     private static createContexts(breakpoints: BreakpointsDefinition): IBreakpointContext[] {
 
         // create contexts
