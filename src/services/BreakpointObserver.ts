@@ -67,7 +67,7 @@ export class BreakpointObserver {
         const contexts: IBreakpointContext[] = [];
 
         // iterate over breakpoints
-        const queryFactory = new MediaQueryFactory(breakpoints);
+        const queryFactory = new MediaQueryFactory(breakpoints, {queryOnly: true});
         Breakpoints.forEach(breakpoint => {
 
             // create base context
