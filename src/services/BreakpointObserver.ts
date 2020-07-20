@@ -2,6 +2,7 @@
 import {Scribe} from "@nascentdigital/scribe";
 import {BehaviorSubject, Observable} from "rxjs";
 import {filter} from "rxjs/operators";
+import {MediaQueryFactory} from "./MediaQueryFactory";
 import {Breakpoint, Breakpoints, BreakpointObservation, BreakpointsDefinition} from "../types";
 
 
@@ -12,11 +13,11 @@ const log = Scribe.getLog("nd-lattice:BreakpointObserver");
 // type definitions
 interface IBreakpointContext {
     breakpoint: Breakpoint;
-    start: number;
-    end?: number;
+    query: string;
     mediaQuery?: any;
     mediaQueryCallback?: (e: any) => void;
 }
+
 
 // class definition
 export class BreakpointObserver {
@@ -66,25 +67,14 @@ export class BreakpointObserver {
         const contexts: IBreakpointContext[] = [];
 
         // iterate over breakpoints
-        Breakpoints.forEach((breakpoint: Breakpoint, breakpointIndex: number) => {
+        const queryFactory = new MediaQueryFactory(breakpoints);
+        Breakpoints.forEach(breakpoint => {
 
             // create base context
-            const breakpointWidth = breakpoints[breakpoint];
             const context: IBreakpointContext = {
                 breakpoint: breakpoint,
-                start: breakpointWidth
+                query: queryFactory.only(breakpoint)
             };
-
-            // special handling for upper breakpoint
-            if (breakpointIndex + 1 < Breakpoints.length) {
-
-                // resolve next breakpoint
-                const endBreakpoint = Breakpoints[breakpointIndex + 1];
-                const endBreakpointWidth = breakpoints[endBreakpoint];
-
-                // update context
-                context.end = endBreakpointWidth - 1;
-            }
 
             // add context
             contexts.push(context);
@@ -117,26 +107,10 @@ export class BreakpointObserver {
             context.mediaQuery.removeEventListener(context.mediaQueryCallback);
         }
 
-        // create last breakpoint query
-        let mediaQuery;
-        if (context.end === undefined) {
-            mediaQuery = `(min-width: ${context.start}px)`;
-        }
-
-        // or create first breakpoint query
-        else if (context.start === 0) {
-            mediaQuery = `(max-width: ${context.end}px)`;
-        }
-
-        // or create bounded breakpoint query
-        else {
-            mediaQuery = `(min-width: ${context.start}px) and (max-width: ${context.end - 1}px)`;
-        }
-
-        log.debug(`creating mediaQuery for "${context.breakpoint}": `, mediaQuery);
+        log.debug(`creating mediaQuery for "${context.breakpoint}": `, context.query);
 
         // bind new media query
-        context.mediaQuery = window.matchMedia(mediaQuery);
+        context.mediaQuery = window.matchMedia(context.query);
         context.mediaQuery.addListener(context.mediaQueryCallback);
 
         // update breakpoint if matching

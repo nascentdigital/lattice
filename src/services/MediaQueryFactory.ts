@@ -3,28 +3,37 @@ import {Breakpoint, Breakpoints, BreakpointsDefinition} from "../types";
 
 
 // constants
+const MediaQueryPrefix = "@media";
 const BreakpointDelta = 0.05;
+
+
+// types
+interface MediaQueryOptions {
+    queryOnly?: boolean;
+}
 
 
 // class
 export class MediaQueryFactory {
 
     public readonly breakpoints: BreakpointsDefinition;
+    private readonly prefix: string;
 
 
-    constructor(breakpoints: BreakpointsDefinition) {
+    constructor(breakpoints: BreakpointsDefinition, options: MediaQueryOptions = {}) {
         this.breakpoints = breakpoints;
+        this.prefix = options.queryOnly ? "" : `${MediaQueryPrefix} `;
     }
 
 
     public up(start: Breakpoint) {
-        return `@media screen and (min-width: ${this.breakpoints[start]}px)`;
+        return `${this.prefix}screen and (min-width: ${this.breakpoints[start]}px)`;
     }
 
     public down(end: Breakpoint) {
         return end === "xl"
             ? this.up("xs")
-            : `@media screen and (max-width: ${this.upperWidth(end)}px)`;
+            : `${this.prefix}screen and (max-width: ${this.upperWidth(end)}px)`;
     }
 
     public between(start: Breakpoint, end: Breakpoint) {
