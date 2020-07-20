@@ -1,7 +1,12 @@
 // imports
+import {Scribe} from "@nascentdigital/scribe";
 import {BehaviorSubject, Observable} from "rxjs";
 import {filter} from "rxjs/operators";
 import {Breakpoint, Breakpoints, BreakpointObservation, BreakpointsDefinition} from "../types";
+
+
+// constants
+const log = Scribe.getLog("nd-lattice:BreakpointObserver");
 
 
 // type definitions
@@ -23,6 +28,8 @@ export class BreakpointObserver {
 
     constructor(breakpoints: BreakpointsDefinition) {
 
+        log.debug("initializing with breakpoints: ", breakpoints);
+
         // initialize instance variables
         this._contexts = BreakpointObserver.createContexts(breakpoints);
         this._current = null;
@@ -34,6 +41,8 @@ export class BreakpointObserver {
             // initialize media query callback
             const breakpoint = context.breakpoint;
             context.mediaQueryCallback = (e) => {
+
+                log.debug(`mediaQuery callback for "${breakpoint}": `, e);
 
                 // update if matches and not current
                 if (e.matches) {
@@ -123,6 +132,8 @@ export class BreakpointObserver {
         else {
             mediaQuery = `(min-width: ${context.start}px) and (max-width: ${context.end - 1}px)`;
         }
+
+        log.debug(`creating mediaQuery for "${context.breakpoint}": `, mediaQuery);
 
         // bind new media query
         context.mediaQuery = window.matchMedia(mediaQuery);
